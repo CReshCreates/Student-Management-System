@@ -6,8 +6,10 @@ public class DepartmentRepository {
     public int getDeptId(String deptName){
         int deptId;
         String qry = "SELECT dept_id FROM department WHERE name = ?";
+        String user = System.getenv("DB_USER");
+        String pass = System.getenv("DB_PASS");
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "password");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "pass");
             PreparedStatement ps = conn.prepareStatement(qry);
 
             ps.setString(1, deptName);
@@ -27,8 +29,11 @@ public class DepartmentRepository {
 
     public void departmentRegistration(String depart_name){
         String qry = "INSERT INTO department (name) VALUES (?)";
+
+        String user = System.getenv("DB_USER");
+        String pass = System.getenv("DB_PASS");
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "password");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "pass");
             PreparedStatement ps = conn.prepareStatement(qry);
 
             ps.setString(1, depart_name);

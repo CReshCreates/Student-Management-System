@@ -7,8 +7,10 @@ import java.sql.*;
 public class UserRepository {
     public User findUserByName(String username) throws SQLException {
         String qry = "SELECT username, password_hash, role FROM users WHERE username = ?";
+        String user = System.getenv("DB_USER");
+        String pass = System.getenv("DB_PASS");
 
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "password");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "pass");
         PreparedStatement preparedStatement = conn.prepareStatement(qry);
 
         preparedStatement.setString(1, username);
@@ -29,8 +31,11 @@ public class UserRepository {
 
     public int regUser(String user_name, String password_hash, String role){
         String qry = "INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)";
+
+        String user = System.getenv("DB_USER");
+        String pass = System.getenv("DB_PASS");
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "password");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "pass");
             PreparedStatement ps = conn.prepareStatement(qry, Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1,user_name);

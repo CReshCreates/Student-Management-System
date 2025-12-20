@@ -9,10 +9,6 @@ import auth.Session;
 import java.util.Scanner;
 
 public class AdminMenu {
-    public final UserRepository userReop = new UserRepository();
-    public final BatchRepository batchRepo = new BatchRepository();
-    public final StudentRepository studentRepo = new StudentRepository();
-    public final PasswordUtil passwordUtil = new PasswordUtil();
     public final DepartmentRepository deptRepo = new DepartmentRepository();
     public final TeacherRepository teacherRepo = new TeacherRepository();
 
@@ -100,13 +96,7 @@ public class AdminMenu {
             System.out.println("Confirm Password:");
             String conf_pass = scanner.nextLine();
 
-            String encrypted_pass = passwordUtil.encryptPassword(password);
-
             if(password.equals(conf_pass)){
-                int userId = userReop.regUser(u_name,encrypted_pass,upperRole);
-                int batch_id;
-                int dept_id;
-
                 switch(upperRole){
                     case "STUDENT":
                         System.out.println("Phone Number:");
@@ -121,8 +111,7 @@ public class AdminMenu {
                         System.out.println("Section:");
                         section = scanner.nextLine();
 
-                        batch_id = batchRepo.regNewStudentBatch(year, program, section);
-                        studentRepo.reg_students(f_name, phone_number,address,userId,batch_id);
+                        registrationService.registerStudent(u_name,password,upperRole,f_name,phone_number,address,year,program,section);
 
                         break;
 
@@ -134,9 +123,7 @@ public class AdminMenu {
                         System.out.println("Department:");
                         department = scanner.nextLine();
 
-                        dept_id = deptRepo.getDeptId(department);
-                        teacherRepo.regTeachers(f_name,phone_number_t,t_address,userId,dept_id);
-
+                        registrationService.registerTeacher(u_name,password,upperRole,f_name,phone_number_t,t_address,department);
                         break;
 
                     case "ADMIN":

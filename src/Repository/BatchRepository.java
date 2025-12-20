@@ -7,8 +7,10 @@ public class BatchRepository {
         int batch_id;
 
         String qry = "INSERT INTO batch (year, program, section) VALUES (?, ?, ?)";
+        String user = System.getenv("DB_USER");
+        String pass = System.getenv("DB_PASS");
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "password");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "pass");
             PreparedStatement ps = conn.prepareStatement(qry, Statement.RETURN_GENERATED_KEYS);
 
             ps.setInt(1, year);
