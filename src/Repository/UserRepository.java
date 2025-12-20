@@ -29,13 +29,10 @@ public class UserRepository {
         return null;
     }
 
-    public int regUser(String user_name, String password_hash, String role){
+    public int regUser(Connection connection, String user_name, String password_hash, String role){
         String qry = "INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)";
-
-        String user = System.getenv("DB_USER");
-        String pass = System.getenv("DB_PASS");
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", user, pass);
+            Connection conn = connection;
             PreparedStatement ps = conn.prepareStatement(qry, Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1,user_name);

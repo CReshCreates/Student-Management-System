@@ -2,6 +2,7 @@ package auth;
 
 import Model.User;
 import Repository.UserRepository;
+import util.PasswordUtil;
 
 import java.sql.SQLException;
 

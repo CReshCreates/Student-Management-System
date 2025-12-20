@@ -6,13 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class TeacherRepository {
-    public void regTeachers(String f_name, String phone_number, String address, int u_id, int dept_id){
+    public void regTeachers(Connection connection, String f_name, String phone_number, String address, int u_id, int dept_id){
         String qry = "INSERT INTO teachers (full_name, phone_number, address, u_id, dept_id) VALUES (?, ?, ?, ?, ?)";
-
-        String user = System.getenv("DB_USER");
-        String pass = System.getenv("DB_PASS");
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", user, pass);
+            Connection conn = connection;
             PreparedStatement ps = conn.prepareStatement(qry);
 
             ps.setString(1, f_name);

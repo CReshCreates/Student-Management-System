@@ -1,16 +1,13 @@
 package menu;
 
-import Model.User;
 import Repository.*;
-import auth.PasswordUtil;
-import auth.RegistrationService;
+import service.RegistrationService;
 import auth.Session;
 
 import java.util.Scanner;
 
 public class AdminMenu {
-    public final DepartmentRepository deptRepo = new DepartmentRepository();
-    public final TeacherRepository teacherRepo = new TeacherRepository();
+    private final RegistrationService registrationService= new RegistrationService();
 
     Scanner scanner = new Scanner(System.in);
 
@@ -39,8 +36,9 @@ public class AdminMenu {
                 break;
 
             case 4:
+                System.out.println("Enter new department:");
                 deptName = scanner.nextLine();
-                deptRepo.departmentRegistration(deptName);
+                registrationService.registerDepartment(deptName);
                 break;
 
             case 5:
@@ -73,9 +71,6 @@ public class AdminMenu {
         }
 
         System.out.println(upperRole);
-
-
-        RegistrationService registrationService= new RegistrationService();
 
         while(true){
             System.out.println("username (email):");
