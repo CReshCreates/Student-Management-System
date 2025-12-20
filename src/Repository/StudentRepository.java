@@ -10,7 +10,7 @@ public class StudentRepository {
         String user = System.getenv("DB_USER");
         String pass = System.getenv("DB_PASS");
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "pass");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", user, pass);
             PreparedStatement ps = conn.prepareStatement(qry);
 
             ps.setString(1, full_name);

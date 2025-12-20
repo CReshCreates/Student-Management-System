@@ -10,7 +10,7 @@ public class UserRepository {
         String user = System.getenv("DB_USER");
         String pass = System.getenv("DB_PASS");
 
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "pass");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", user, pass);
         PreparedStatement preparedStatement = conn.prepareStatement(qry);
 
         preparedStatement.setString(1, username);
@@ -35,7 +35,7 @@ public class UserRepository {
         String user = System.getenv("DB_USER");
         String pass = System.getenv("DB_PASS");
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", "user", "pass");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", user, pass);
             PreparedStatement ps = conn.prepareStatement(qry, Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1,user_name);
