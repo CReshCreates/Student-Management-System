@@ -1,8 +1,8 @@
 package menu;
 
 import Model.User;
-import auth.AuthService;
-import auth.Session;
+import service.AuthService;
+import session.Session;
 
 import java.util.Scanner;
 

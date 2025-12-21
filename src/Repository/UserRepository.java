@@ -3,6 +3,8 @@ package Repository;
 import Model.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepository {
     public User findUserByName(String username) throws SQLException {
@@ -60,4 +62,32 @@ public class UserRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public List<User> allUser(){
+        List<User> users = new ArrayList<>();
+        String qry = "SELECT *FROM users";
+        String dbUser = System.getenv("DB_USER");
+        String pass = System.getenv("DB_PASS");
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", dbUser, pass);
+            PreparedStatement ps = conn.prepareStatement(qry);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                User user = new User(
+                  rs.getString("u_id"),
+                  rs.getString("username"),
+                  rs.getString("role")
+                );
+
+                users.add(user);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return users;
+    }
+
 }

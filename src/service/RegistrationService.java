@@ -15,6 +15,8 @@ public class RegistrationService {
     private final TeacherRepository teacherRepo = new TeacherRepository();
     private final DepartmentRepository departmentRepo = new DepartmentRepository();
     private final PasswordUtil hashed_password = new PasswordUtil();
+    private final AdminRepository adminRepo = new AdminRepository();
+
     public boolean isUsernameAvailable(String username){
         try {
             User user = userRepo.findUserByName(username);
@@ -127,6 +129,41 @@ public class RegistrationService {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+            }
+        }
+    }
+
+    public void registerAdmin(String userName, String password, String role, String fullName){
+        String hashedPassword = hashed_password.encryptPassword(password);
+        Connection conn = null;
+        try{
+            String user = System.getenv("DB_USER");
+            String pass = System.getenv("DB_PASS");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", user, pass);
+            conn.setAutoCommit(false);
+
+            int u_id = userRepo.regUser(conn, userName, hashedPassword, role);
+            adminRepo.registerAdmin(conn, fullName, u_id);
+
+            conn.commit();
+
+        } catch (Exception e) {
+            try{
+                if(conn != null){
+                    conn.rollback();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        finally{
+            try{
+                if(conn != null){
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
