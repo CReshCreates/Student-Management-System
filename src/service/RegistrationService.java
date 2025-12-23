@@ -2,10 +2,10 @@ package service;
 
 import Model.User;
 import Repository.*;
+import util.DBUtil;
 import util.PasswordUtil;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class RegistrationService {
@@ -16,6 +16,7 @@ public class RegistrationService {
     private final DepartmentRepository departmentRepo = new DepartmentRepository();
     private final PasswordUtil hashed_password = new PasswordUtil();
     private final AdminRepository adminRepo = new AdminRepository();
+    private final DBUtil dbUtil = new DBUtil();
 
     public boolean isUsernameAvailable(String username){
         try {
@@ -29,9 +30,7 @@ public class RegistrationService {
     public void registerStudent(String user_name, String password, String role, String full_name, String phone_number, String address, int year, String program, String section){
         Connection conn = null;
         try{
-            String user = System.getenv("DB_USER");
-            String pass = System.getenv("DB_PASS");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", user, pass);
+            conn = dbUtil.connection();
             conn.setAutoCommit(false);
 
             String reg_hashed_password = hashed_password.encryptPassword(password);
@@ -68,9 +67,7 @@ public class RegistrationService {
         Connection conn = null;
 
         try{
-            String user = System.getenv("DB_USER");
-            String pass = System.getenv("DB_PASS");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", user, pass);
+            conn = dbUtil.connection();
             conn.setAutoCommit(false);
 
             int uId = userRepo.regUser(conn, user_name,reg_hashed_password,role);
@@ -103,9 +100,7 @@ public class RegistrationService {
         Connection conn = null;
 
         try{
-            String user = System.getenv("DB_USER");
-            String pass = System.getenv("DB_PASS");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", user, pass);
+            conn = dbUtil.connection();
             conn.setAutoCommit(false);
 
             departmentRepo.departmentRegistration(conn, deptName);
@@ -137,9 +132,7 @@ public class RegistrationService {
         String hashedPassword = hashed_password.encryptPassword(password);
         Connection conn = null;
         try{
-            String user = System.getenv("DB_USER");
-            String pass = System.getenv("DB_PASS");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/SIS", user, pass);
+            conn = dbUtil.connection();
             conn.setAutoCommit(false);
 
             int u_id = userRepo.regUser(conn, userName, hashedPassword, role);

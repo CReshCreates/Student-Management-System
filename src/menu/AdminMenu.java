@@ -13,7 +13,9 @@ public class AdminMenu {
     Scanner scanner = new Scanner(System.in);
 
     public void show(){
-        System.out.println("--------Welcome to Admin Menu--------");
+        while(true){
+
+            System.out.println("--------Welcome to Admin Menu--------");
         System.out.println("1. Register User.");
         System.out.println("2. View All Users");
         System.out.println("3. Delete User.");
@@ -25,31 +27,34 @@ public class AdminMenu {
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-        switch (choice){
-            case 1:
-                userRegistrationMenu();
-                break;
+            switch (choice){
+                case 1:
+                    userRegistrationMenu();
+                    break;
 
-            case 2:
-                userService.viewAllUsers();
-                break;
+                case 2:
+                    userService.viewAllUsers();
+                    break;
 
-            case 3:
-                break;
+                case 3:
+                    selectUserToDelete();
+                    break;
 
-            case 4:
+                case 4:
 
-                break;
+                    break;
 
-            case 5:
-                registerDepartment();
-                break;
+                case 5:
+                    registerDepartment();
+                    break;
 
-            case 6:
-                Session.logout();
-                System.out.println("Logged Out Successfully!");
-                new MainMenu();
+                case 6:
+                    Session.logout();
+                    System.out.println("Logged Out Successfully!");
+                    new MainMenu();
+            }
         }
+
     }
 
     public void userRegistrationMenu(){
@@ -151,5 +156,25 @@ public class AdminMenu {
         String deptName = scanner.nextLine();
 
         registrationService.registerDepartment(deptName);
+    }
+
+    public void selectUserToDelete(){
+        System.out.println("Enter username to be deleted:");
+        String userToBeDeleted = scanner.nextLine();
+        System.out.println("The user will be permanently deleted. Are you sure? Y/N");
+
+        while(true){
+            char confirmation = scanner.next().charAt(0);
+            if(confirmation == 'y' || confirmation == 'Y'){
+                userService.deleteUser(userToBeDeleted);
+                break;
+            } else if (confirmation == 'n' || confirmation == 'N') {
+                System.out.println("Deletion cancelled!");
+                break;
+            }
+            else{
+                System.out.println("Invalid input. Please type y or n.");
+            }
+        }
     }
 }

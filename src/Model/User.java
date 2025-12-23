@@ -1,7 +1,5 @@
 package Model;
 
-import javax.management.relation.Role;
-
 public class User {
     String UserName;
     String Password;
@@ -23,10 +21,5 @@ public class User {
 
     public String getRoles(){
         return Roles;
-    }
-
-    @Override
-    public String toString(){
-        return "username='" + UserName + '\'' + ", password='" + Password + '\'' + ", role='" + Roles + '\'';
     }
 }
