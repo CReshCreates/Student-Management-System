@@ -1,15 +1,13 @@
 package service;
 
+import Model.User;
 import Model.UserView;
 import Repository.UserRepository;
-import util.DBUtil;
 
-import java.sql.Connection;
 import java.util.List;
 
 public class UserService {
     private final UserRepository userRepo = new UserRepository();
-    private final DBUtil dbUtil = new DBUtil();
 
     public void viewAllUsers(){
         List<UserView> users = userRepo.getUserWithNameAndRole();
@@ -17,12 +15,14 @@ public class UserService {
     }
 
     public void deleteUser(String username){
-        try{
-            Connection connection = dbUtil.connection();
-            userRepo.deleteUserByUsername(connection, username);
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        transactionManager.execute(conn ->{
+            User user = userRepo.findUserByName(username);
+            if(user == null){
+                System.out.println("User not found!");
+                return;
+            }
+            userRepo.deleteUserByUsername(conn, username);
+            System.out.println("User deleted successfully!!!");
+        });
     }
 }
