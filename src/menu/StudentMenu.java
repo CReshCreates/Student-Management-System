@@ -1,8 +1,11 @@
 package menu;
 
+import session.Session;
+
 import java.util.Scanner;
 
 public class StudentMenu {
+
     Scanner scanner = new Scanner(System.in);
     public void show(){
         while(true){
@@ -20,17 +23,15 @@ public class StudentMenu {
 
             switch(choice){
                 case 1:
-                    passwordMenu();
+                    new PasswordMenu().show();
                     break;
+
+                case 6:
+                    Session.logout();
+                    System.out.println("Logged Out Successfully!");
+                    new MainMenu();
             }
         }
     }
 
-    public void passwordMenu(){
-        System.out.println("Enter old password:");
-        String oldPassword = scanner.nextLine();
-        System.out.println("Enter new password:");
-
-        System.out.println("Re-enter new password:");
-    }
 }

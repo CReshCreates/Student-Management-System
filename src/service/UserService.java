@@ -3,11 +3,19 @@ package service;
 import Model.User;
 import Model.UserView;
 import Repository.UserRepository;
+import util.DBUtil;
+import util.PasswordUtil;
+import util.PasswordValidator;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
     private final UserRepository userRepo = new UserRepository();
+    private final DBUtil dbUtil = new DBUtil();
+    private final PasswordUtil passwordUtil = new PasswordUtil();
+    private final PasswordValidator passwordValidator = new PasswordValidator();
 
     public void viewAllUsers(){
         List<UserView> users = userRepo.getUserWithNameAndRole();
@@ -24,5 +32,28 @@ public class UserService {
             userRepo.deleteUserByUsername(conn, username);
             System.out.println("User deleted successfully!!!");
         });
+    }
+
+    public void changePassword(String username, String oldPassword, String newPassword){
+        Connection conn = dbUtil.connection();
+        try {
+            User user = userRepo.findUserByName(username);
+            if(user == null){
+                throw new RuntimeException("User not found!");
+            }
+
+            String oldpassword = passwordUtil.encryptPassword(oldPassword);
+            if(!oldpassword.equals(user.getPassword())){
+                System.out.println("Old password incorrect!");
+            }
+
+            passwordValidator.validate(newPassword);
+            String hashedPassword = passwordUtil.encryptPassword(newPassword);
+            userRepo.updatePassword(conn, username, hashedPassword);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

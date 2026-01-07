@@ -119,4 +119,16 @@ public class UserRepository {
             }
         }
     }
+
+    public void updatePassword(Connection conn, String username, String newHashedPassword){
+        String qry = "UPDATE users SET password_hash = ? WHERE username = ?";
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+            preparedStatement.setString(1, newHashedPassword);
+            preparedStatement.setString(2, username);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

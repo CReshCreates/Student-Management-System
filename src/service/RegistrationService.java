@@ -1,10 +1,12 @@
 package service;
 
+import Model.Subjects;
 import Model.User;
 import Repository.*;
 import util.PasswordUtil;
-import util.passwordValidator;
+import util.PasswordValidator;
 import java.sql.SQLException;
+import java.util.List;
 
 public class RegistrationService {
     private final UserRepository userRepo = new UserRepository();
@@ -14,7 +16,9 @@ public class RegistrationService {
     private final DepartmentRepository departmentRepo = new DepartmentRepository();
     private final PasswordUtil hashed_password = new PasswordUtil();
     private final AdminRepository adminRepo = new AdminRepository();
-    private final passwordValidator passwordValidate = new passwordValidator();
+    private final PasswordValidator passwordValidate = new PasswordValidator();
+    private final CourseRepository courseRepository = new CourseRepository();
+    private final SubjectRepository subRepo = new SubjectRepository();
 
     public boolean isUsernameAvailable(String username){
         try {
@@ -61,7 +65,20 @@ public class RegistrationService {
         });
     }
 
+    public void registerNewCourse(String courseName, String deptName, List<Subjects> subjects){
+        transactionManager.execute(conn ->{
+            int deptId = departmentRepo.getDeptId(conn, deptName);
+            int courseId = courseRepository.addCourse(conn, courseName, deptId);
+
+            for(Subjects subject : subjects){
+                subRepo.addSubject(conn, subject.getCode(), subject.getSubName(), subject.getSem(), courseId);
+            }
+            System.out.println("Course registration successful.");
+        });
+    }
+
     private String validateAndHash(String password){
+        passwordValidate.passwordConfirmation(password);
         passwordValidate.validate(password);
         return hashed_password.encryptPassword(password);
     }

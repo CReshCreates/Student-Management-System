@@ -14,14 +14,15 @@ public class AdminMenu {
 
     public void show(){
         while(true){
-
             System.out.println("--------Welcome to Admin Menu--------");
             System.out.println("1. Register User.");
             System.out.println("2. View All Users");
             System.out.println("3. Delete User.");
-            System.out.println("4. Assign Teacher.");
-            System.out.println("5. Add Department");
-            System.out.println("6. Logout.");
+            System.out.println("4. Manage Course.");
+            System.out.println("5. Assign Teacher.");
+            System.out.println("6. Add Department");
+            System.out.println("7. Change Password.");
+            System.out.println("8. Logout.");
             System.out.println("Enter your choice:");
 
             int choice = scanner.nextInt();
@@ -41,14 +42,18 @@ public class AdminMenu {
                         break;
 
                     case 4:
-
-                        break;
-
-                    case 5:
-                        registerDepartment();
+                        new CourseMenu().show();
                         break;
 
                     case 6:
+                        registerDepartment();
+                        break;
+
+                    case 7:
+                        new PasswordMenu().show();
+                        break;
+
+                    case 8:
                         Session.logout();
                         System.out.println("Logged Out Successfully!");
                         new MainMenu();

@@ -17,7 +17,8 @@ public class TeacherMenu {
         System.out.println("6. Assign lab assignments.");
         System.out.println("7. Attach notes.");
         System.out.println("8. Upload marks.");
-        System.out.println("9. Logout.");
+        System.out.println("9. Change Password.");
+        System.out.println("10. Logout.");
         System.out.println("Enter your choice:");
 
         int choice = scanner.nextInt();
@@ -48,6 +49,10 @@ public class TeacherMenu {
                 break;
 
             case 9:
+                new PasswordMenu().show();
+                break;
+
+            case 10:
                 Session.logout();
                 System.out.println("Logged Out!");
                 new MainMenu();
