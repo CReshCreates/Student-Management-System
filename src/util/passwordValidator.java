@@ -1,8 +1,20 @@
 package util;
 
-public class passwordValidator {
+import java.util.Scanner;
 
+public class passwordValidator {
+    static Scanner scanner = new Scanner(System.in);
     public static void validate(String password) {
+
+        while(true){
+            System.out.println("Confirm Password:");
+            String conf_pass = scanner.nextLine();
+
+            if(password.equals(conf_pass)){
+                break;
+            }
+            System.out.println("Password do not match. Please try again!!!");
+        }
 
         if (password == null || password.isBlank())
             throw new IllegalArgumentException("Password cannot be empty");

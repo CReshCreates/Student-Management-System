@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class StudentMenu {
     Scanner scanner = new Scanner(System.in);
-    public void view(){
+    public void show(){
         while(true){
             System.out.println("--------Welcome To Student Menu--------");
             System.out.println("1. Change password.");

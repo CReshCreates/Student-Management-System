@@ -67,18 +67,6 @@ public class AdminMenu {
         System.out.println("Password:");
         password = scanner.nextLine();
 
-
-        while(true){
-
-            System.out.println("Confirm Password:");
-            String conf_pass = scanner.nextLine();
-
-            if(password.equals(conf_pass)){
-               break;
-            }
-            System.out.println("Password do not match. Please try again!!!");
-        }
-
         switch(role){
             case "STUDENT":
                 registerStudent(u_name, password, f_name);

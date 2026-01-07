@@ -14,7 +14,7 @@ public class RegistrationService {
     private final DepartmentRepository departmentRepo = new DepartmentRepository();
     private final PasswordUtil hashed_password = new PasswordUtil();
     private final AdminRepository adminRepo = new AdminRepository();
-    private final passwordValidator passwordValidator = new passwordValidator();
+    private final passwordValidator passwordValidate = new passwordValidator();
 
     public boolean isUsernameAvailable(String username){
         try {
@@ -29,7 +29,7 @@ public class RegistrationService {
         transactionManager.execute(conn -> {
             String hashedPassword = validateAndHash(password);
 
-            int userId = userRepo.regUser(conn, user_name, hashedPassword, "STIDENT");
+            int userId = userRepo.regUser(conn, user_name, hashedPassword, "STUDENT");
             int batchId = batchRepo.regNewStudentBatch(conn, year, program, section);
             studentRepo.reg_students(conn, full_name,phone_number, address, userId, batchId);
         });
@@ -62,7 +62,7 @@ public class RegistrationService {
     }
 
     private String validateAndHash(String password){
-        util.passwordValidator.validate(password);
+        passwordValidate.validate(password);
         return hashed_password.encryptPassword(password);
     }
 }

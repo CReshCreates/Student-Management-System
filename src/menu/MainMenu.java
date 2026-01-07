@@ -38,10 +38,12 @@ public class MainMenu {
 
                 case "STUDENT":
                     System.out.println("Logged In as Student!");
+                    new StudentMenu().show();
                     break;
 
                 case "TEACHER":
                     System.out.println("Logged In as Teacher!");
+                    new TeacherMenu().show();
                     break;
             }
         }
