@@ -1,6 +1,10 @@
 package Repository;
 
+import Model.Course;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CourseRepository {
     public int addCourse(Connection conn, String courseName, int deptId){
@@ -28,6 +32,25 @@ public class CourseRepository {
             }
 
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Course> viewCourse(Connection conn){
+        String qry = "SELECT course_id, name FROM course";
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+
+            List<Course> courses = new ArrayList<>();
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()){
+                int courseId = rs.getInt(1);
+                String courseName = rs.getString(2);
+                courses.add(new Course(courseName, courseId));
+            }
+            return courses;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

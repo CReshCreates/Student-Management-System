@@ -65,7 +65,7 @@ public class CourseMenu {
     }
 
     private void viewCourse(){
-
+        courseSerivce.viewCourse();
     }
 
     private void updateCourse(){

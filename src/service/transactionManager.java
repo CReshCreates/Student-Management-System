@@ -15,17 +15,15 @@ public class transactionManager {
             conn.setAutoCommit(false);
             operation.run(conn);
             conn.commit();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try{
                 if(conn!=null)
                     conn.rollback();
             }
-            catch (Exception ignored)
-            {}
+            catch (SQLException ignored) {}
+
             throw new RuntimeException(e);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally{
+        }finally{
             try{
                 if(conn!=null){
                     conn.setAutoCommit(true);
