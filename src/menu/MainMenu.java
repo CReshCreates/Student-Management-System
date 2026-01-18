@@ -1,5 +1,7 @@
 package menu;
 
+import Controller.AuthController;
+import Model.LoginRequest;
 import Model.User;
 import service.AuthService;
 import session.Session;
@@ -7,50 +9,28 @@ import session.Session;
 import java.util.Scanner;
 
 public class MainMenu {
-    public AuthService authService;
-    public MainMenu(){
-        input();
-    }
+    private final Scanner scanner = new Scanner(System.in);
+    private final AuthController authController = new AuthController();
 
-    public void input(){
-        System.out.println("--------Welcome to Student Management System--------");
+    public void start(){
+        while(true){
+            LoginMenu loginMenu = new LoginMenu(scanner);
+            LoginRequest request = loginMenu.getLoginInput();
 
-        Scanner sc = new Scanner(System.in);
+            User user = authController.login(request.username(), request.password());
 
-        System.out.print("\nEnter the username:");
-        String username = sc.nextLine();
-        System.out.print("\nEnter the password:");
-        String password = sc.nextLine();
+            if(user == null){
+                System.out.println("Invalid credentials. Try again.");
+                continue;
+            }
 
-        authService = new AuthService();
-        User user = authService.validation(username, password);
-
-        if(user != null){
             Session.login(user);
 
-            System.out.println(user.getRoles());
-            System.out.println("Log In Successful.");
             switch(user.getRoles()){
-                case "ADMIN":
-                    System.out.println("Logged In as admin!");
-                    new AdminMenu().show();
-                    break;
-
-                case "STUDENT":
-                    System.out.println("Logged In as Student!");
-                    new StudentMenu().show();
-                    break;
-
-                case "TEACHER":
-                    System.out.println("Logged In as Teacher!");
-                    new TeacherMenu().show();
-                    break;
+                case "ADMIN" -> new AdminMenu().show();
+                case "STUDENT" -> new StudentMenu().show();
+                case "TEACHER" -> new TeacherMenu().show();
             }
         }
-        else{
-            System.out.println("Invalid Username or Password. Please try again.");
-            input();
-        }
     }
-
 }

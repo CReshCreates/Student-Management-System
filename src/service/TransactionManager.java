@@ -5,7 +5,7 @@ import util.DBUtil;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class transactionManager {
+public class TransactionManager {
     private static final DBUtil dbUtil = new DBUtil();
 
     public static void execute(TransactionOperation operation){

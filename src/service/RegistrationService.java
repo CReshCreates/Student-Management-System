@@ -30,7 +30,7 @@ public class RegistrationService {
     }
 
     public void registerStudent(String user_name, String password, String full_name, String phone_number, String address, int year, String program, String section){
-        transactionManager.execute(conn -> {
+        TransactionManager.execute(conn -> {
             String hashedPassword = validateAndHash(password);
 
             int userId = userRepo.regUser(conn, user_name, hashedPassword, "STUDENT");
@@ -40,7 +40,7 @@ public class RegistrationService {
     }
 
     public void registerTeacher(String user_name, String password, String full_name, String phone_number, String address, String department){
-        transactionManager.execute(conn -> {
+        TransactionManager.execute(conn -> {
             String hashedPassword = validateAndHash(password);
 
             int userId = userRepo.regUser(conn, user_name, hashedPassword, "TEACHER");
@@ -50,13 +50,13 @@ public class RegistrationService {
     }
 
     public void registerDepartment(String deptName){
-        transactionManager.execute(conn -> {
+        TransactionManager.execute(conn -> {
             departmentRepo.departmentRegistration(conn, deptName);
         });
     }
 
     public void registerAdmin(String userName, String password,  String fullName){
-        transactionManager.execute(conn -> {
+        TransactionManager.execute(conn -> {
 
             String hashedPassword = validateAndHash(password);
             int userId = userRepo.regUser(conn, userName, hashedPassword,"ADMIN");
@@ -66,7 +66,7 @@ public class RegistrationService {
     }
 
     public void registerNewCourse(String courseName, String deptName, List<Subjects> subjects){
-        transactionManager.execute(conn ->{
+        TransactionManager.execute(conn ->{
             int deptId = departmentRepo.getDeptId(conn, deptName);
             int courseId = courseRepository.addCourse(conn, courseName, deptId);
 

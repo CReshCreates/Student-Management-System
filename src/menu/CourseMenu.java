@@ -1,8 +1,8 @@
 package menu;
 
+import Controller.CourseController;
+import Model.Course;
 import Model.Subjects;
-import service.CourseSerivce;
-import service.RegistrationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,7 @@ import java.util.Scanner;
 
 public class CourseMenu {
     private Scanner scanner = new Scanner(System.in);
-    private CourseSerivce courseSerivce = new CourseSerivce();
-    private RegistrationService regService = new RegistrationService();
+    private CourseController courseController = new CourseController();
 
     public void show(){
         while(true){
@@ -60,12 +59,30 @@ public class CourseMenu {
 
             subjects.add(new Subjects(subCode, subName, semester));
         }
-
-        regService.registerNewCourse(courseName, deptName, subjects);
+        boolean success = courseController.addCourse(courseName, deptName, subjects);
+        if(success)
+            System.out.println("Course added Successfully.");
     }
 
     private void viewCourse(){
-        courseSerivce.viewCourse();
+        List<Course> courses = courseController.getAllCourses();
+        if (courses.isEmpty()) {
+            System.out.println("No courses found.");
+            return;
+        }
+
+        System.out.println("Courses:");
+        courses.forEach(System.out::println);
+
+        System.out.print("Enter Course ID to see subjects (or 0 to skip): ");
+        int courseId = scanner.nextInt();
+        scanner.nextLine();
+        if (courseId != 0) {
+            List<Subjects> subjects = courseController.getSubjectsByCourseId(courseId);
+            if (subjects.isEmpty()) System.out.println("No subjects found.");
+            else subjects.forEach(s -> System.out.println(
+                    "Code: " + s.getCode() + ", Name: " + s.getSubName() + ", Sem: " + s.getSem()));
+        }
     }
 
     private void updateCourse(){

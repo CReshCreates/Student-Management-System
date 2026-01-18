@@ -1,8 +1,13 @@
 package Repository;
 
+import Model.Subjects;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubjectRepository {
     public void addSubject(Connection conn, String code, String name, int sem, int courseId){
@@ -21,6 +26,28 @@ public class SubjectRepository {
             }
             System.out.println("Subject Registration Successful.");
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Subjects> viewSubjects(Connection conn, int courseId){
+        String qry = "SELECT code, name, semester FROM subjects WHERE course_id = ?";
+        List<Subjects> subjects = new ArrayList<>();
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+            preparedStatement.setInt(1, courseId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()){
+                String code = rs.getString(1);
+                String name = rs.getString(2);
+                int semester = rs.getInt(3);
+                subjects.add(new Subjects(code, name, semester));
+            }
+            return subjects;
+
+        }catch(SQLException e){
             throw new RuntimeException(e);
         }
     }

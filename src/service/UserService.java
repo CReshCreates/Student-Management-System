@@ -23,7 +23,7 @@ public class UserService {
     }
 
     public void deleteUser(String username){
-        transactionManager.execute(conn ->{
+        TransactionManager.execute(conn ->{
             User user = userRepo.findUserByName(username);
             if(user == null){
                 System.out.println("User not found!");
