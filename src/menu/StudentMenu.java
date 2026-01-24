@@ -1,12 +1,16 @@
 package menu;
 
+import Controller.PasswordController;
+import Controller.StudentController;
 import session.Session;
 
 import java.util.Scanner;
 
 public class StudentMenu {
 
+    private final StudentController studentController = new StudentController();
     Scanner scanner = new Scanner(System.in);
+
     public void show(){
         while(true){
             System.out.println("--------Welcome To Student Menu--------");
@@ -22,14 +26,16 @@ public class StudentMenu {
             scanner.nextLine();
 
             switch(choice){
-                case 1:
-                    new PasswordMenu().show();
-                    break;
-
-                case 6:
+                case 1 -> new PasswordMenu().show();
+                case 2 -> studentController.viewAttendance();
+                case 3 -> studentController.viewAssignments();
+                case 4 -> studentController.viewLabAssignments();
+                case 5 -> studentController.viewNotes();
+                case 6 -> {
                     Session.logout();
-                    System.out.println("Logged Out Successfully!");
-                    new MainMenu();
+                    System.out.println("Logged out successfully!");
+                    return;
+                }
             }
         }
     }

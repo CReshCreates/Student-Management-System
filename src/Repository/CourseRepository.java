@@ -59,4 +59,64 @@ public class CourseRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean isCourseAvailable(Connection conn, int courseId){
+        String qry = "SELECT sub_id FROM subjects where sub_id = ?";
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+            preparedStatement.setInt(1, courseId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                int course_id = rs.getInt(1);
+                if(course_id == courseId){
+                    return true;
+                }
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    public boolean updateCourseName(Connection conn, int id, String newName){
+        String qry = "UPDATE course SET name = ? where course_id = ?";
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+            preparedStatement.setString(1, newName);
+            preparedStatement.setInt(2, id);
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if(affectedRows == 0){
+                return false;
+            }
+            return true;
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean updateCourseDuration(Connection conn, int courseId, int duration){
+        return false;
+    }
+
+    public boolean deleteCourse(Connection conn, int courseId){
+        String qry = "DELETE FROM course WHERE course_id = ?";
+        try{
+            PreparedStatement prepareStatement = conn.prepareStatement(qry);
+            prepareStatement.setInt(1, courseId);
+
+            int affectedRows = prepareStatement.executeUpdate();
+
+            if(affectedRows == 0){
+                return false;
+            }
+
+            return true;
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
 }

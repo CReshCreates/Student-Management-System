@@ -1,28 +1,29 @@
 package Repository;
 
+import Model.DeptInfo;
+
 import java.sql.*;
 
 public class DepartmentRepository {
-    public int getDeptId(Connection connection, String deptName){
-        int deptId;
-        String qry = "SELECT dept_id FROM department WHERE name = ?";
+    public DeptInfo getDeptId(Connection connection, String deptName){
+        String qry = "SELECT *FROM department WHERE name = ?";
         try {
             Connection conn = connection;
             PreparedStatement ps = conn.prepareStatement(qry);
-
             ps.setString(1, deptName);
 
-            ResultSet retrievedId = ps.executeQuery();
-            if(retrievedId.next()){
-                deptId = retrievedId.getInt(1);
-                return deptId;
+            ResultSet resultSet = ps.executeQuery();
+
+            while(resultSet.next()){
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                return new DeptInfo(id, name);
             }
-            else{
-                throw new SQLException("Department not found!");
-            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 
     public void departmentRegistration(Connection connection, String depart_name){

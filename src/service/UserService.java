@@ -34,7 +34,7 @@ public class UserService {
         });
     }
 
-    public void changePassword(String username, String oldPassword, String newPassword){
+    public boolean changePassword(String username, String newPassword){
         Connection conn = dbUtil.connection();
         try {
             User user = userRepo.findUserByName(username);
@@ -42,14 +42,9 @@ public class UserService {
                 throw new RuntimeException("User not found!");
             }
 
-            String oldpassword = passwordUtil.encryptPassword(oldPassword);
-            if(!oldpassword.equals(user.getPassword())){
-                System.out.println("Old password incorrect!");
-            }
-
             passwordValidator.validate(newPassword);
             String hashedPassword = passwordUtil.encryptPassword(newPassword);
-            userRepo.updatePassword(conn, username, hashedPassword);
+            return userRepo.updatePassword(conn, username, hashedPassword);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

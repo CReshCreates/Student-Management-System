@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class PasswordValidator {
     static Scanner scanner = new Scanner(System.in);
-    public static void validate(String password) {
+    public String validate(String password) {
 
         if (password == null || password.isBlank())
             throw new IllegalArgumentException("Password cannot be empty");
@@ -20,9 +20,11 @@ public class PasswordValidator {
 
         if (!password.matches(".*\\d.*"))
             throw new IllegalArgumentException("Password must contain a digit");
+        else
+            return password;
     }
 
-    public static void passwordConfirmation(String password){
+    public String passwordConfirmation(String password){
         while(true){
             System.out.println("Confirm Password:");
             String conf_pass = scanner.nextLine();
@@ -32,5 +34,6 @@ public class PasswordValidator {
             }
             System.out.println("Password do not match. Please try again!!!");
         }
+        return password;
     }
 }

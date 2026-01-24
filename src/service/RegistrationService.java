@@ -29,22 +29,17 @@ public class RegistrationService {
         }
     }
 
-    public void registerStudent(String user_name, String password, String full_name, String phone_number, String address, int year, String program, String section){
+    public void registerStudent(String user_name, String full_name, String phone_number, String address, String section, int batchId, String hashedPassword){
         TransactionManager.execute(conn -> {
-            String hashedPassword = validateAndHash(password);
-
             int userId = userRepo.regUser(conn, user_name, hashedPassword, "STUDENT");
-            int batchId = batchRepo.regNewStudentBatch(conn, year, program, section);
-            studentRepo.reg_students(conn, full_name,phone_number, address, userId, batchId);
+            studentRepo.reg_students(conn, full_name,phone_number, address, userId, batchId, section);
         });
     }
 
-    public void registerTeacher(String user_name, String password, String full_name, String phone_number, String address, String department){
+    public void registerTeacher(String user_name, String full_name, String phone_number, String address, int deptId, String hashedPassword){
         TransactionManager.execute(conn -> {
-            String hashedPassword = validateAndHash(password);
 
             int userId = userRepo.regUser(conn, user_name, hashedPassword, "TEACHER");
-            int deptId = departmentRepo.getDeptId(conn, department);
             teacherRepo.regTeachers(conn, full_name, phone_number, address, userId, deptId);
         });
     }
@@ -55,17 +50,15 @@ public class RegistrationService {
         });
     }
 
-    public void registerAdmin(String userName, String password,  String fullName){
+    public void registerAdmin(String userName,  String fullName, String hashedPassword){
         TransactionManager.execute(conn -> {
-
-            String hashedPassword = validateAndHash(password);
             int userId = userRepo.regUser(conn, userName, hashedPassword,"ADMIN");
             adminRepo.registerAdmin(conn, fullName, userId);
 
         });
     }
 
-    public void registerNewCourse(String courseName, String deptName, List<Subjects> subjects){
+    /*public void registerNewCourse(String courseName, String deptName, List<Subjects> subjects){
         TransactionManager.execute(conn ->{
             int deptId = departmentRepo.getDeptId(conn, deptName);
             int courseId = courseRepository.addCourse(conn, courseName, deptId);
@@ -77,9 +70,5 @@ public class RegistrationService {
         });
     }
 
-    private String validateAndHash(String password){
-        passwordValidate.passwordConfirmation(password);
-        passwordValidate.validate(password);
-        return hashed_password.encryptPassword(password);
-    }
+     */
 }

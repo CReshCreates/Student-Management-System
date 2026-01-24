@@ -1,10 +1,13 @@
 package menu;
 
+import Controller.PasswordController;
+import Controller.TeacherController;
 import session.Session;
 
 import java.util.Scanner;
 
 public class TeacherMenu {
+    private final TeacherController teacherController = new TeacherController();
 
     public void show(){
         Scanner scanner = new Scanner(System.in);
@@ -24,38 +27,20 @@ public class TeacherMenu {
         int choice = scanner.nextInt();
 
         switch(choice){
-            case 1:
-                break;
-
-            case 2:
-                break;
-
-            case 3:
-                break;
-
-            case 4:
-                break;
-
-            case 5:
-                break;
-
-            case 6:
-                break;
-
-            case 7:
-                break;
-
-            case 8:
-                break;
-
-            case 9:
-                new PasswordMenu().show();
-                break;
-
-            case 10:
+            case 1 -> teacherController.getCourseAssignment();
+            case 2 -> teacherController.takeStudentAttendance();
+            case 3 -> teacherController.getMyAttendance();
+            case 4 -> teacherController.assignAssignments();
+            case 5 -> teacherController.getSubmittedAssignments();
+            case 6 -> teacherController.assignLabAssignments();
+            case 7 -> teacherController.attachNotes();
+            case 8 -> teacherController.uploadMarks();
+            case 9 -> new PasswordMenu().show();
+            case 10 -> {
                 Session.logout();
-                System.out.println("Logged Out!");
-                new MainMenu();
+                System.out.println("Logged Out Successfully!!!");
+                return;
+            }
         }
     }
 }

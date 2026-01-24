@@ -1,108 +1,141 @@
 package Controller;
 
+import Model.BatchInfo;
+import Model.DeptInfo;
+import Model.UserRegInfo;
+import service.BatchService;
+import service.DepartmentService;
 import service.RegistrationService;
 import service.UserService;
+import util.PasswordUtil;
+import util.PasswordValidator;
 
 import java.util.Scanner;
 
 public class AdminController {
 
+    private final BatchService batchService = new BatchService();
     private final RegistrationService registrationService = new RegistrationService();
     private final UserService userService = new UserService();
+    private final DepartmentService deptService = new DepartmentService();
+    private final PasswordValidator passwordValidate = new PasswordValidator();
+    private final PasswordUtil passwordUtil = new PasswordUtil();
 
-    public void registerUser(Scanner scanner){
-        System.out.println("Enter the role:");
-        String role = scanner.nextLine().toUpperCase();
 
+    //Validations
+
+    public String roleCheck(Scanner scanner, String role){
         while (!role.equals("ADMIN") && !role.equals("TEACHER") && !role.equals("STUDENT")) {
             System.out.println("Invalid role. Try again:");
             role = scanner.nextLine().toUpperCase();
         }
+        return role;
+    }
 
-        System.out.println("Enter username (email): ");
-        String username = scanner.nextLine();
-
+    public String usernameValidation(Scanner scanner, String username){
         while(!registrationService.isUsernameAvailable(username)){
             System.out.println("Username already taken. Enter another.");
             username = scanner.nextLine();
         }
-
-        System.out.println("Full Name: ");
-        String fullName = scanner.nextLine();
-
-        System.out.println("Password: ");
-        String password = scanner.nextLine();
-
-        switch(role){
-            case "STUDENT":
-                System.out.println("Phone Number:");
-                String phoneNumber = scanner.nextLine();
-
-                System.out.println("Address:");
-                String address = scanner.nextLine();
-
-                System.out.println("Batch/Year");
-                int year = scanner.nextInt();
-                scanner.nextLine();
-
-                System.out.println("Program:");
-                String program = scanner.nextLine();
-
-                System.out.println("Section:");
-                String section = scanner.nextLine();
-
-                registrationService.registerStudent(username, password, fullName, phoneNumber, address, year, program, section);
-                System.out.println("Student registered successfully!");
-
-                break;
-
-            case "TEACHER":
-                System.out.println("Phone Number:");
-                String phone = scanner.nextLine();
-
-                System.out.println("Address:");
-                String tAddress = scanner.nextLine();
-
-                System.out.println("Department:");
-                String department = scanner.nextLine();
-
-                registrationService.registerTeacher(username, password, fullName, phone, tAddress, department);
-                break;
-
-            case "ADMIN":
-                registrationService.registerAdmin(username, password, fullName);
-                break;
-        }
+        return username;
     }
+
+    public BatchInfo validateBatchAndProgram(Scanner scanner, int year, String program){
+        BatchInfo batchInfo = batchService.getBatch(year, program);
+        while(batchInfo == null){
+            System.out.println("Either program or batch not found.");
+            System.out.println("Enter a valid batch: ");
+            year = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.println("Enter a valid program for that batch: ");
+            program = scanner.nextLine();
+
+            batchInfo = batchService.getBatch(year, program);
+        }
+        return batchInfo;
+    }
+
+
+    public DeptInfo departmentValidation(Scanner scanner, String department){
+        DeptInfo deptInfo = deptService.getDepartment(department);
+        while(deptInfo == null){
+            System.out.println("Department not available. Enter a valid department: ");
+            department =scanner.nextLine();
+
+            deptInfo = deptService.getDepartment(department);
+        }
+        return deptInfo;
+    }
+
+
+    //Registrations
+
+    public void registerStudent(UserRegInfo regInfo, BatchInfo batchInfo){
+        registrationService.registerStudent(
+                regInfo.getUserName(),
+                regInfo.getFullName(),
+                regInfo.getPhoneNumber(),
+                regInfo.getAddress(),
+                regInfo.getSection(),
+                batchInfo.getBatchId(),
+                encryptPassword(regInfo.getPassword())
+        );
+    }
+
+    public void registerTeacher(UserRegInfo regInfo, DeptInfo deptInfo){
+        registrationService.registerTeacher(
+                regInfo.getUserName(),
+                regInfo.getFullName(),
+                regInfo.getPhoneNumber(),
+                regInfo.getAddress(),
+                deptInfo.getDeptId(),
+                encryptPassword(regInfo.getPassword())
+        );
+    }
+
+    public void registerAdmin(UserRegInfo regInfo){
+        registrationService.registerAdmin(
+                regInfo.getUserName(),
+                regInfo.getFullName(),
+                encryptPassword(regInfo.getPassword())
+        );
+    }
+
+    public void registerDepartment(String deptName){
+        registrationService.registerDepartment(deptName);
+    }
+
+
+    //Other Operations
 
     public void viewAllUsers(){
         userService.viewAllUsers();
     }
 
-    public void deleteUser(Scanner scanner){
-        System.out.println("Enter username to be deleted:");
-        String userToBeDeleted = scanner.nextLine();
-        System.out.println("The user will be permanently deleted. Are you sure? Y/N");
+    public void deleteUser(String userToBeDeleted){
 
-        while(true){
-            char confirmation = scanner.next().charAt(0);
-            if(confirmation == 'y' || confirmation == 'Y'){
-                userService.deleteUser(userToBeDeleted);
-                break;
-            } else if (confirmation == 'n' || confirmation == 'N') {
-                System.out.println("Deletion cancelled!");
-                break;
-            }
-            else{
-                System.out.println("Invalid input. Please type y or n.");
-            }
-        }
     }
 
-    public void registerDepartment(Scanner scanner){
-        System.out.println("Enter new department:");
-        String deptName = scanner.nextLine();
 
-        registrationService.registerDepartment(deptName);
+    //Util
+
+    public String validate(String password){
+        password = passwordValidate.passwordConfirmation(password);
+        return passwordValidate.validate(password);
+    }
+
+    public String encryptPassword(String password){
+        return passwordUtil.encryptPassword(password);
+    }
+
+    private int readInt(Scanner scanner) {
+        while (!scanner.hasNextInt()) {
+            System.out.println("Enter a valid number:");
+            scanner.nextLine();
+        }
+        int value = scanner.nextInt();
+        scanner.nextLine();
+        return value;
     }
 }

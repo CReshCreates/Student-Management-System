@@ -51,4 +51,60 @@ public class SubjectRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean updateSubjectName(Connection conn, String code, String newName){
+        String qry = "UPDATE subjects SET name = ? WHERE code = ?";
+
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+            preparedStatement.setString(1, newName);
+            preparedStatement.setString(2, code);
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if(affectedRows == 0){
+                return false;
+            }
+
+            return true;
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean updateSubjectCode(Connection conn, String oldCode, String newCode){
+        String qry = "UPDATE subjects SET code = ? WHERE code = ?";
+
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+            preparedStatement.setString(1, oldCode);
+            preparedStatement.setString(2, newCode);
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if(affectedRows == 0){
+                return false;
+            }
+            return true;
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean updateSemester(Connection conn, String code, int semester){
+        String qry = "UPDATE subjects SET semester = ? WHERE code = ?";
+
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+            preparedStatement.setInt(1, semester);
+            preparedStatement.setString(2, code);
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if(affectedRows == 0){
+                return false;
+            }
+            return true;
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
 }

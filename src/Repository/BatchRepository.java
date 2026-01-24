@@ -1,19 +1,22 @@
 package Repository;
 
+import Model.BatchInfo;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BatchRepository {
-    public int regNewStudentBatch(Connection connection, int year, String program, String section){
+    public int regBatch(Connection connection, int year, String program){
         int batch_id;
 
-        String qry = "INSERT INTO batch (year, program, section) VALUES (?, ?, ?)";
+        String qry = "INSERT INTO batch (year, program) VALUES (?, ?)";
         try {
             Connection conn = connection;
             PreparedStatement ps = conn.prepareStatement(qry, Statement.RETURN_GENERATED_KEYS);
 
             ps.setInt(1, year);
             ps.setString(2, program);
-            ps.setString(3, section);
 
             int affected_rows = ps.executeUpdate();
 
@@ -33,5 +36,27 @@ public class BatchRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public BatchInfo batchInfo(Connection conn, int batch, String userProgram){
+        String qry = "SELECT *FROM batch WHERE year = ? AND program = ?";
+
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+            preparedStatement.setInt(1, batch);
+            preparedStatement.setString(2, userProgram);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                int year = rs.getInt(2);
+                String program = rs.getString(3);
+
+                return new BatchInfo(id, year, program);
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }
