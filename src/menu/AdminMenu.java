@@ -4,8 +4,11 @@ import Controller.AdminController;
 import Model.BatchInfo;
 import Model.DeptInfo;
 import Model.UserRegInfo;
+import Model.UserView;
 import session.Session;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class AdminMenu {
@@ -31,11 +34,11 @@ public class AdminMenu {
 
                 switch (choice){
                     case 1 -> registerMenu();
-                    case 2 -> controller.viewAllUsers();
+                    case 2 -> viewUser();
                     case 3-> deleteMenu();
                     case 4 -> new CourseMenu().show();
-                    //case 5 -> controller.createNewBatch(scanner);
-                    //case 6 -> controller.assignCourse();
+                    case 5 -> batchCreationMenu();
+                    case 6 -> teacherAssignmentMenu();
                     case 7 -> deptMenu();
                     case 8 -> new PasswordMenu().show();
                     case 9 -> {
@@ -46,6 +49,11 @@ public class AdminMenu {
                     default -> System.out.println("Invalid choice!!!");
                 }
         }
+    }
+
+    public void viewUser(){
+        List<UserView> userViewList = new ArrayList<>();
+        userViewList.forEach(System.out::println);
     }
 
     public void registerMenu(){
@@ -151,6 +159,19 @@ public class AdminMenu {
         String deptName = scanner.nextLine();
 
         controller.registerDepartment(deptName);
+    }
+
+    public void batchCreationMenu(){
+        System.out.println("Enter a new batch: ");
+        int newBatch = readInt();
+        System.out.println("Enter a program: ");
+        String newProgram = scanner.nextLine();
+
+        controller.createNewBatchWithValidation(scanner, newBatch, newProgram);
+    }
+
+    public void teacherAssignmentMenu(){
+
     }
 
     private int readInt() {

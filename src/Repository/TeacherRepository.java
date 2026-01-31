@@ -1,9 +1,10 @@
 package Repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import Model.TeacherAndDepartment;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TeacherRepository {
     public void regTeachers(Connection connection, String f_name, String phone_number, String address, int u_id, int dept_id){
@@ -30,5 +31,27 @@ public class TeacherRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<TeacherAndDepartment> getTeacherAndBatch(Connection conn, int deptId){
+        List<TeacherAndDepartment> teacherAndDepartments = new ArrayList<>();
+        String qry = "SELECT t_id, full_name FROM teachers WHERE dept_id = ?";
+        try{
+            PreparedStatement prepareStatement = conn.prepareStatement(qry);
+            prepareStatement.setInt(1, deptId);
+            ResultSet rs = prepareStatement.executeQuery();
+
+            while(rs.next()){
+                TeacherAndDepartment teacherAndDepartment = new TeacherAndDepartment(
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getInt(3)
+                );
+                teacherAndDepartments.add(teacherAndDepartment);
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return teacherAndDepartments;
     }
 }

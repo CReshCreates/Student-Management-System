@@ -30,12 +30,12 @@ public class SubjectRepository {
         }
     }
 
-    public List<Subjects> viewSubjects(Connection conn, int courseId){
-        String qry = "SELECT code, name, semester FROM subjects WHERE course_id = ?";
+    public List<Subjects> viewSubjects(Connection conn, String courseName){
+        String qry = "SELECT code, name, semester FROM subjects WHERE name = ?";
         List<Subjects> subjects = new ArrayList<>();
         try{
             PreparedStatement preparedStatement = conn.prepareStatement(qry);
-            preparedStatement.setInt(1, courseId);
+            preparedStatement.setString(1, courseName);
 
             ResultSet rs = preparedStatement.executeQuery();
 

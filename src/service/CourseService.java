@@ -12,7 +12,6 @@ import java.util.List;
 public class CourseService {
     private final CourseRepository courseRepo = new CourseRepository();
     private final SubjectRepository subjectRepo = new SubjectRepository();
-    private final TransactionManager transactionManager = new TransactionManager();
     private DBUtil dbUtil = new DBUtil();
 
 
@@ -21,10 +20,11 @@ public class CourseService {
         return courseRepo.viewCourse(conn);
     }
 
-    public List<Subjects> viewSubjects(int courseId){
+    public List<Subjects> viewSubjects(String courseName){
         Connection conn = dbUtil.connection();
-        return subjectRepo.viewSubjects(conn, courseId);
+        return subjectRepo.viewSubjects(conn, courseName);
     }
+
 
     public boolean isCourseAvailable(int courseId){
             Connection conn = dbUtil.connection();

@@ -1,15 +1,12 @@
 package Controller;
 
-import Model.BatchInfo;
-import Model.DeptInfo;
-import Model.UserRegInfo;
-import service.BatchService;
-import service.DepartmentService;
-import service.RegistrationService;
-import service.UserService;
+import Model.*;
+import service.*;
 import util.PasswordUtil;
 import util.PasswordValidator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class AdminController {
@@ -20,6 +17,9 @@ public class AdminController {
     private final DepartmentService deptService = new DepartmentService();
     private final PasswordValidator passwordValidate = new PasswordValidator();
     private final PasswordUtil passwordUtil = new PasswordUtil();
+    private final TeacherService teacherService = new TeacherService();
+    private final CourseService courseService = new CourseService();
+    private final TeacherAssignmentService teacherAssignmentService = new TeacherAssignmentService();
 
 
     //Validations
@@ -45,8 +45,7 @@ public class AdminController {
         while(batchInfo == null){
             System.out.println("Either program or batch not found.");
             System.out.println("Enter a valid batch: ");
-            year = scanner.nextInt();
-            scanner.nextLine();
+            year = readInt(scanner);
 
             System.out.println("Enter a valid program for that batch: ");
             program = scanner.nextLine();
@@ -66,6 +65,19 @@ public class AdminController {
             deptInfo = deptService.getDepartment(department);
         }
         return deptInfo;
+    }
+
+    public void createNewBatchWithValidation(Scanner scanner, int year, String program) {
+        while (batchService.getBatch(year, program) != null) {
+            System.out.println("Batch with this program already exists.");
+
+            System.out.print("Enter new batch year: ");
+            year = readInt(scanner);
+
+            System.out.print("Enter new program: ");
+            program = scanner.nextLine();
+        }
+        batchService.addBatch(year, program);
     }
 
 
@@ -109,14 +121,36 @@ public class AdminController {
 
     //Other Operations
 
-    public void viewAllUsers(){
-        userService.viewAllUsers();
+    public List<UserView>viewAllUsers(){
+        return userService.viewAllUsers();
+    }
+
+    public void viewAllDepartment(){
+        deptService.viewAllDepartment();
     }
 
     public void deleteUser(String userToBeDeleted){
-
+        userService.deleteUser(userToBeDeleted);
     }
 
+    /* public List<TeacherAssignmentList> teacherAssignmentList(String courseName) {
+        List<Subjects> subjectsList = courseService.viewSubjects(courseName);
+        List<BatchInfo> batchInfoList = batchService.getBatchInfo();
+        List<TeacherAssignment> teacherAssignmentList = teacherAssignmentService.getTeacherAssignment();
+
+        TeacherAssignmentList teacherAssignmentList1 = new TeacherAssignmentList(batchInfoList, subjectsList, teacherAssignmentList);
+
+        List<TeacherAssignmentList> result = new ArrayList<>();
+        result.add(teacherAssignmentList1);
+
+        return result;
+    }
+
+
+     */
+    public List<TeacherAndDepartment> getTeacherAndDepartment(int deptId){
+        return teacherService.getTeachersAndDepartments(deptId);
+    }
 
     //Util
 

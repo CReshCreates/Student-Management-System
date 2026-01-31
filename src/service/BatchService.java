@@ -4,7 +4,7 @@ import Model.BatchInfo;
 import Repository.BatchRepository;
 import util.DBUtil;
 
-import java.sql.Connection;
+import java.util.List;
 
 public class BatchService {
     private final DBUtil dbUtil = new DBUtil();
@@ -16,5 +16,9 @@ public class BatchService {
 
     public void addBatch(int year, String program){
         batchRepo.regBatch(dbUtil.connection(), year, program);
+    }
+
+    public List<BatchInfo> getBatchInfo(){
+        return batchRepo.getProgramAndBatch(dbUtil.connection());
     }
 }

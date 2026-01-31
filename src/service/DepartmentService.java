@@ -5,6 +5,7 @@ import Repository.DepartmentRepository;
 import util.DBUtil;
 
 import java.sql.Connection;
+import java.util.List;
 
 public class DepartmentService {
     private final DepartmentRepository deptRepo = new DepartmentRepository();

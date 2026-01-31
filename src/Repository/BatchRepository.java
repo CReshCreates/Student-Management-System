@@ -59,4 +59,28 @@ public class BatchRepository {
         }
         return null;
     }
+
+    public List<BatchInfo> getProgramAndBatch(Connection conn){
+        List<BatchInfo> batchInfo = new ArrayList<>();
+        String qry = "SELECT *FROM batch";
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()){
+                BatchInfo info = new BatchInfo(
+                    rs.getInt(1),
+                    rs.getInt(2),
+                    rs.getString(3)
+                );
+                batchInfo.add(info);
+            }
+
+            return batchInfo;
+
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
 }

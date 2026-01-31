@@ -27,8 +27,8 @@ public class CourseController {
         return courseService.viewCourse();
     }
 
-    public List<Subjects> getSubjectsByCourseId(int courseId){
-        return courseService.viewSubjects(courseId);
+    public List<Subjects> getSubjectsByCourseName(String courseName){
+        return courseService.viewSubjects(courseName);
     }
 
     public boolean isCourseAvailable(int courseId){

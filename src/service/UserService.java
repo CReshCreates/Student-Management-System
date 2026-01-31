@@ -17,9 +17,8 @@ public class UserService {
     private final PasswordUtil passwordUtil = new PasswordUtil();
     private final PasswordValidator passwordValidator = new PasswordValidator();
 
-    public void viewAllUsers(){
-        List<UserView> users = userRepo.getUserWithNameAndRole();
-        users.forEach(System.out::println);
+    public List<UserView> viewAllUsers(){
+        return userRepo.getUserWithNameAndRole();
     }
 
     public void deleteUser(String username){

@@ -78,11 +78,10 @@ public class CourseMenu {
         System.out.println("Courses:");
         courses.forEach(System.out::println);
 
-        System.out.print("Enter Course ID to see subjects (or 0 to skip): ");
-        int courseId = scanner.nextInt();
-        scanner.nextLine();
-        if (courseId != 0) {
-            List<Subjects> subjects = courseController.getSubjectsByCourseId(courseId);
+        System.out.print("Enter Course Name to see subjects (or EXIT to skip): ");
+        String courseName = scanner.nextLine().toUpperCase();
+        if (!courseName.equals("EXIT")) {
+            List<Subjects> subjects = courseController.getSubjectsByCourseName(courseName);
             if (subjects.isEmpty()) System.out.println("No subjects found.");
             else subjects.forEach(s -> System.out.println(
                     "Code: " + s.getCode() + ", Name: " + s.getSubName() + ", Sem: " + s.getSem()));

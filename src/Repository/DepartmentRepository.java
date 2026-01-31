@@ -3,6 +3,7 @@ package Repository;
 import Model.DeptInfo;
 
 import java.sql.*;
+import java.util.List;
 
 public class DepartmentRepository {
     public DeptInfo getDeptId(Connection connection, String deptName){
@@ -44,5 +45,9 @@ public class DepartmentRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<DeptInfo> deptInfoList(){
+        String qry = "SELECT "
     }
 }
