@@ -1,11 +1,14 @@
 package Controller;
 
-import Model.*;
+import Model.DataTransfer.UserRegInfo;
+import Model.Normal.BatchInfo;
+import Model.Normal.DeptInfo;
+import Model.Normal.Teacher;
+import Model.Normal.UserView;
 import service.*;
 import util.PasswordUtil;
 import util.PasswordValidator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,7 +21,7 @@ public class AdminController {
     private final PasswordValidator passwordValidate = new PasswordValidator();
     private final PasswordUtil passwordUtil = new PasswordUtil();
     private final TeacherService teacherService = new TeacherService();
-    private final CourseService courseService = new CourseService();
+    private final SubjectService subjectService = new SubjectService();
     private final TeacherAssignmentService teacherAssignmentService = new TeacherAssignmentService();
 
 
@@ -38,6 +41,32 @@ public class AdminController {
             username = scanner.nextLine();
         }
         return username;
+    }
+
+    public int teacherValidation(Scanner scanner, int teacherId){
+        while (!teacherService.isTeacherAvailable(teacherId)) {
+            System.out.println("Teacher not found. Please try again.");
+            teacherId = readInt(scanner);
+        }
+        return teacherId;
+    }
+
+    public int subjectValidation(Scanner scanner, String subjectCode){
+        while(!subjectService.isSubjectAvailable(subjectCode)){
+            System.out.println("Subject not found. Please try again.");
+            subjectCode = scanner.nextLine();
+        }
+        return subjectService.getSubjectId(subjectCode);
+    }
+
+    public String[] sectionValidation(Scanner scanner, String[] section, int noOfSection){
+        for(int i = 0; i< noOfSection; i++){
+            while(!section[i].equals("A") && !section[i].equals("B") && !section[i].equals("C")){
+                System.out.println("No section found. Please type A, B or C.");
+                section[i] = scanner.nextLine();
+            }
+        }
+        return section;
     }
 
     public BatchInfo validateBatchAndProgram(Scanner scanner, int year, String program){
@@ -118,6 +147,10 @@ public class AdminController {
         registrationService.registerDepartment(deptName);
     }
 
+    public void assignSubjectToTeacher(int teacherId, int subId, int batchId, String[] section, int noOfSection){
+        teacherAssignmentService.assignSubjectToTeachers(teacherId, subId, batchId, section, noOfSection);
+    }
+
 
     //Other Operations
 
@@ -125,32 +158,19 @@ public class AdminController {
         return userService.viewAllUsers();
     }
 
-    public void viewAllDepartment(){
-        deptService.viewAllDepartment();
+    public List<DeptInfo> viewAllDepartment(){
+        return deptService.getDeptInfo();
+    }
+
+    public List<Teacher> showTeachersRelativeToDept(int deptId){
+        return teacherService.getTeachersRelativeToDepartment(deptId);
     }
 
     public void deleteUser(String userToBeDeleted){
         userService.deleteUser(userToBeDeleted);
     }
 
-    /* public List<TeacherAssignmentList> teacherAssignmentList(String courseName) {
-        List<Subjects> subjectsList = courseService.viewSubjects(courseName);
-        List<BatchInfo> batchInfoList = batchService.getBatchInfo();
-        List<TeacherAssignment> teacherAssignmentList = teacherAssignmentService.getTeacherAssignment();
 
-        TeacherAssignmentList teacherAssignmentList1 = new TeacherAssignmentList(batchInfoList, subjectsList, teacherAssignmentList);
-
-        List<TeacherAssignmentList> result = new ArrayList<>();
-        result.add(teacherAssignmentList1);
-
-        return result;
-    }
-
-
-     */
-    public List<TeacherAndDepartment> getTeacherAndDepartment(int deptId){
-        return teacherService.getTeachersAndDepartments(deptId);
-    }
 
     //Util
 

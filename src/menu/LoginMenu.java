@@ -1,6 +1,6 @@
 package menu;
 
-import Model.LoginRequest;
+import Model.DataTransfer.LoginRequest;
 
 import java.util.Scanner;
 

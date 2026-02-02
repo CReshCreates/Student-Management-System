@@ -1,4 +1,4 @@
-package Model;
+package Model.DataTransfer;
 
 public class UserRegInfo {
     String role;

@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.User;
+import Model.Normal.User;
 import service.AuthService;
 
 public class AuthController {

@@ -1,7 +1,7 @@
 package service;
 
-import Model.User;
-import Model.UserView;
+import Model.Normal.User;
+import Model.Normal.UserView;
 import Repository.UserRepository;
 import util.DBUtil;
 import util.PasswordUtil;

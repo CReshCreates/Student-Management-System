@@ -1,6 +1,6 @@
 package Repository;
 
-import Model.TeacherAndDepartment;
+import Model.Normal.Teacher;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,8 +10,7 @@ public class TeacherRepository {
     public void regTeachers(Connection connection, String f_name, String phone_number, String address, int u_id, int dept_id){
         String qry = "INSERT INTO teachers (full_name, phone_number, address, u_id, dept_id) VALUES (?, ?, ?, ?, ?)";
         try {
-            Connection conn = connection;
-            PreparedStatement ps = conn.prepareStatement(qry);
+            PreparedStatement ps = connection.prepareStatement(qry);
 
             ps.setString(1, f_name);
             ps.setString(2, phone_number);
@@ -33,8 +32,8 @@ public class TeacherRepository {
         }
     }
 
-    public List<TeacherAndDepartment> getTeacherAndBatch(Connection conn, int deptId){
-        List<TeacherAndDepartment> teacherAndDepartments = new ArrayList<>();
+    public List<Teacher> getTeachersRelativeToDepartment(Connection conn, int deptId){
+        List<Teacher> teachers = new ArrayList<>();
         String qry = "SELECT t_id, full_name FROM teachers WHERE dept_id = ?";
         try{
             PreparedStatement prepareStatement = conn.prepareStatement(qry);
@@ -42,16 +41,39 @@ public class TeacherRepository {
             ResultSet rs = prepareStatement.executeQuery();
 
             while(rs.next()){
-                TeacherAndDepartment teacherAndDepartment = new TeacherAndDepartment(
+                Teacher teacher = new Teacher(
                     rs.getInt(1),
-                    rs.getString(2),
-                    rs.getInt(3)
+                    rs.getString(2)
                 );
-                teacherAndDepartments.add(teacherAndDepartment);
+                teachers.add(teacher);
             }
         }catch(SQLException e){
             throw new RuntimeException(e);
         }
-        return teacherAndDepartments;
+        return teachers;
+    }
+
+    public boolean isAvailable(Connection conn, int teacherId){
+        String qry = "SELECT t_id from teachers where t_id = ?";
+        try{
+            PreparedStatement prepareStatement = conn.prepareStatement(qry);
+            prepareStatement.setInt(1, teacherId);
+
+            ResultSet rs = prepareStatement.executeQuery();
+            boolean check = false;
+
+            while (rs.next()) {
+                if(rs.getInt(1) != teacherId){
+                    check = false;
+                }else{
+                    check = true;
+                }
+            }
+
+            return check;
+
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
     }
 }

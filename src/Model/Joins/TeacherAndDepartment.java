@@ -1,4 +1,4 @@
-package Model;
+package Model.Joins;
 
 public class TeacherAndDepartment {
     int t_id;

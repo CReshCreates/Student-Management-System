@@ -1,4 +1,4 @@
-package Model;
+package Model.Normal;
 
 public class DeptInfo {
     int deptId;
@@ -15,5 +15,9 @@ public class DeptInfo {
 
     public String getDeptName(){
         return deptName;
+    }
+
+    public String toString(){
+        return "Department Id: " + deptId + ", Department Name: " + deptName;
     }
 }

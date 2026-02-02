@@ -1,8 +1,8 @@
 package Controller;
 
-import Model.User;
+import Model.Normal.User;
 import service.UserService;
-import session.Session;
+import Session.Session;
 import util.PasswordUtil;
 import util.PasswordValidator;
 

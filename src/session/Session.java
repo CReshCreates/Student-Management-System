@@ -1,6 +1,6 @@
-package session;
+package Session;
 
-import Model.User;
+import Model.Normal.User;
 
 public class Session {
     private static User currentUser;

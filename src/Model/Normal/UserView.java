@@ -1,4 +1,4 @@
-package Model;
+package Model.Normal;
 
 public class UserView {
     private int user_id;

@@ -1,6 +1,6 @@
 package service;
 
-import Model.BatchInfo;
+import Model.Normal.BatchInfo;
 import Repository.BatchRepository;
 import util.DBUtil;
 

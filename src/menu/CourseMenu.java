@@ -1,8 +1,8 @@
 package menu;
 
 import Controller.CourseController;
-import Model.Course;
-import Model.Subjects;
+import Model.Normal.Course;
+import Model.Normal.Subjects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class CourseMenu {
                 case 2 -> viewCourse();
                 case 3 -> updateCourseMenu();
                 case 4 -> deleteCourse();
-                case 5 -> new AdminMenu().show();
+                case 5 -> new AdminMenu().show(scanner);
                 default -> System.out.println("Invalid Choice!");
             }
         }
@@ -61,11 +61,10 @@ public class CourseMenu {
 
             subjects.add(new Subjects(subCode, subName, semester));
         }
-        /*boolean success = courseController.addCourse(courseName, deptName, subjects);
+        boolean success = courseController.addCourse(courseName, deptName, subjects);
         if(success)
             System.out.println("Course added Successfully.");
 
-         */
     }
 
     private void viewCourse(){
@@ -78,10 +77,10 @@ public class CourseMenu {
         System.out.println("Courses:");
         courses.forEach(System.out::println);
 
-        System.out.print("Enter Course Name to see subjects (or EXIT to skip): ");
-        String courseName = scanner.nextLine().toUpperCase();
-        if (!courseName.equals("EXIT")) {
-            List<Subjects> subjects = courseController.getSubjectsByCourseName(courseName);
+        System.out.print("Enter Course ID to see subjects (or 0 to skip): ");
+        int courseId = readInt(scanner);
+        if (courseId != 0) {
+            List<Subjects> subjects = courseController.getSubjectsByCourseId(courseId);
             if (subjects.isEmpty()) System.out.println("No subjects found.");
             else subjects.forEach(s -> System.out.println(
                     "Code: " + s.getCode() + ", Name: " + s.getSubName() + ", Sem: " + s.getSem()));
@@ -207,5 +206,15 @@ public class CourseMenu {
 
         boolean success = courseController.updateSemester(code, newSem);
         System.out.println(success ? "Updated Successfully" : "Update failed.");
+    }
+
+    private int readInt(Scanner scanner) {
+        while (!scanner.hasNextInt()) {
+            System.out.println("Enter a valid number:");
+            scanner.nextLine();
+        }
+        int value = scanner.nextInt();
+        scanner.nextLine();
+        return value;
     }
 }

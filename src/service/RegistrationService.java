@@ -1,24 +1,21 @@
 package service;
 
-import Model.Subjects;
-import Model.User;
+import Model.Normal.DeptInfo;
+import Model.Normal.Subjects;
+import Model.Normal.User;
 import Repository.*;
-import util.PasswordUtil;
-import util.PasswordValidator;
+
 import java.sql.SQLException;
 import java.util.List;
 
 public class RegistrationService {
     private final UserRepository userRepo = new UserRepository();
-    private final BatchRepository batchRepo = new BatchRepository();
     private final StudentRepository studentRepo = new StudentRepository();
     private final TeacherRepository teacherRepo = new TeacherRepository();
     private final DepartmentRepository departmentRepo = new DepartmentRepository();
-    private final PasswordUtil hashed_password = new PasswordUtil();
     private final AdminRepository adminRepo = new AdminRepository();
-    private final PasswordValidator passwordValidate = new PasswordValidator();
-    private final CourseRepository courseRepository = new CourseRepository();
     private final SubjectRepository subRepo = new SubjectRepository();
+    private final CourseRepository courseRepo = new CourseRepository();
 
     public boolean isUsernameAvailable(String username){
         try {
@@ -58,10 +55,11 @@ public class RegistrationService {
         });
     }
 
-    /*public void registerNewCourse(String courseName, String deptName, List<Subjects> subjects){
+    public void registerNewCourse(String courseName, String deptName, List<Subjects> subjects){
         TransactionManager.execute(conn ->{
-            int deptId = departmentRepo.getDeptId(conn, deptName);
-            int courseId = courseRepository.addCourse(conn, courseName, deptId);
+            DeptInfo deptInfo = departmentRepo.getDept(conn, deptName);
+            int deptId = deptInfo.getDeptId();
+            int courseId = courseRepo.addCourse(conn, courseName, deptId);
 
             for(Subjects subject : subjects){
                 subRepo.addSubject(conn, subject.getCode(), subject.getSubName(), subject.getSem(), courseId);
@@ -70,5 +68,5 @@ public class RegistrationService {
         });
     }
 
-     */
+
 }

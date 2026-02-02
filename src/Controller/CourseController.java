@@ -1,7 +1,7 @@
 package Controller;
 
-import Model.Course;
-import Model.Subjects;
+import Model.Normal.Course;
+import Model.Normal.Subjects;
 import service.CourseService;
 import service.RegistrationService;
 
@@ -12,7 +12,7 @@ public class CourseController {
     private final RegistrationService registrationService = new RegistrationService();
     private final CourseService courseService = new CourseService();
 
-    /*public boolean addCourse(String courseName, String deptName, List<Subjects> subjects){
+    public boolean addCourse(String courseName, String deptName, List<Subjects> subjects){
         try{
             registrationService.registerNewCourse(courseName, deptName, subjects);
             return true;
@@ -21,14 +21,13 @@ public class CourseController {
         }
     }
 
-     */
 
     public List<Course> getAllCourses(){
         return courseService.viewCourse();
     }
 
-    public List<Subjects> getSubjectsByCourseName(String courseName){
-        return courseService.viewSubjects(courseName);
+    public List<Subjects> getSubjectsByCourseId(int courseId){
+        return courseService.viewSubjects(courseId);
     }
 
     public boolean isCourseAvailable(int courseId){

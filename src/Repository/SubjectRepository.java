@@ -1,6 +1,6 @@
 package Repository;
 
-import Model.Subjects;
+import Model.Normal.Subjects;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +10,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectRepository {
+
+    public int getSubId(Connection conn, String code){
+        String qry = "SELECT sub_id FROM subjects WHERE code = ?";
+
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+            preparedStatement.setString(1, code);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            int id = 0;
+
+            while (rs.next()) {
+                id = rs.getInt(1);
+            }
+
+            return id;
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
     public void addSubject(Connection conn, String code, String name, int sem, int courseId){
         String qry = "INSERT INTO subjects (code, name, semester, course_id) VALUES (?, ?, ?, ?)";
         try {
@@ -30,12 +51,12 @@ public class SubjectRepository {
         }
     }
 
-    public List<Subjects> viewSubjects(Connection conn, String courseName){
-        String qry = "SELECT code, name, semester FROM subjects WHERE name = ?";
+    public List<Subjects> viewSubjects(Connection conn, int courseId){
+        String qry = "SELECT code, name, semester FROM subjects WHERE course_id = ?";
         List<Subjects> subjects = new ArrayList<>();
         try{
             PreparedStatement preparedStatement = conn.prepareStatement(qry);
-            preparedStatement.setString(1, courseName);
+            preparedStatement.setInt(1, courseId);
 
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -103,6 +124,32 @@ public class SubjectRepository {
                 return false;
             }
             return true;
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean isAvailable(Connection conn, String subjectCode){
+        String qry = "SELECT code FROM subjects WHERE code = ?";
+
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+            preparedStatement.setString(1, subjectCode);
+
+            boolean check = false;
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()){
+                if(rs.getString(1).equals(subjectCode)){
+                    check = true;
+                }
+                else{
+                    check = false;
+                }
+            }
+
+            return check;
         }catch(SQLException e){
             throw new RuntimeException(e);
         }

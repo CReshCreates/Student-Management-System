@@ -1,16 +1,16 @@
 package Repository;
 
-import Model.DeptInfo;
+import Model.Normal.DeptInfo;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentRepository {
-    public DeptInfo getDeptId(Connection connection, String deptName){
+    public DeptInfo getDept(Connection connection, String deptName){
         String qry = "SELECT *FROM department WHERE name = ?";
         try {
-            Connection conn = connection;
-            PreparedStatement ps = conn.prepareStatement(qry);
+            PreparedStatement ps = connection.prepareStatement(qry);
             ps.setString(1, deptName);
 
             ResultSet resultSet = ps.executeQuery();
@@ -27,11 +27,29 @@ public class DepartmentRepository {
         return null;
     }
 
+    public List<DeptInfo> getAllDepartInfo(Connection connection){
+        String qry = "SELECT *FROM department";
+        List<DeptInfo> deptInfoList = new ArrayList<>();
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(qry);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                DeptInfo deptInfo = new DeptInfo(
+                        rs.getInt(1),
+                        rs.getString(2)
+                );
+                deptInfoList.add(deptInfo);
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return deptInfoList;
+    }
+
     public void departmentRegistration(Connection connection, String depart_name){
         String qry = "INSERT INTO department (name) VALUES (?)";
         try {
-            Connection conn = connection;
-            PreparedStatement ps = conn.prepareStatement(qry);
+            PreparedStatement ps = connection.prepareStatement(qry);
 
             ps.setString(1, depart_name);
 
@@ -45,9 +63,5 @@ public class DepartmentRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public List<DeptInfo> deptInfoList(){
-        String qry = "SELECT "
     }
 }

@@ -1,6 +1,6 @@
 package service;
 
-import Model.TeacherAndDepartment;
+import Model.Normal.Teacher;
 import Repository.TeacherRepository;
 import util.DBUtil;
 
@@ -11,8 +11,12 @@ public class TeacherService {
     private final TeacherRepository teacherRepo = new TeacherRepository();
     private final DBUtil dbUtil = new DBUtil();
 
-    public List<TeacherAndDepartment> getTeachersAndDepartments(int deptId){
-        return teacherRepo.getTeacherAndBatch(dbUtil.connection(), deptId);
+    public List<Teacher> getTeachersRelativeToDepartment(int deptId){
+        return teacherRepo.getTeachersRelativeToDepartment(dbUtil.connection(), deptId);
+    }
+
+    public boolean isTeacherAvailable(int teacherId){
+        return teacherRepo.isAvailable(dbUtil.connection(), teacherId);
     }
 
     public void viewCourseAssignment(){

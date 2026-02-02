@@ -1,6 +1,6 @@
 package service;
 
-import Model.User;
+import Model.Normal.User;
 import Repository.UserRepository;
 import util.PasswordUtil;
 

@@ -1,6 +1,6 @@
 package Repository;
 
-import Model.BatchInfo;
+import Model.Normal.BatchInfo;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,8 +12,7 @@ public class BatchRepository {
 
         String qry = "INSERT INTO batch (year, program) VALUES (?, ?)";
         try {
-            Connection conn = connection;
-            PreparedStatement ps = conn.prepareStatement(qry, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(qry, Statement.RETURN_GENERATED_KEYS);
 
             ps.setInt(1, year);
             ps.setString(2, program);

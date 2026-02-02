@@ -1,15 +1,12 @@
 package Repository;
 
-import Model.Course;
-import util.DBUtil;
+import Model.Normal.Course;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CourseRepository {
-
-    private final DBUtil dbUtil = new DBUtil();
 
     public int addCourse(Connection conn, String courseName, int deptId){
         String qry = "INSERT INTO course (name, dept_id) VALUES (?, ?)";

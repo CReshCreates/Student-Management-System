@@ -1,6 +1,6 @@
 package service;
 
-import Model.DeptInfo;
+import Model.Normal.DeptInfo;
 import Repository.DepartmentRepository;
 import util.DBUtil;
 
@@ -13,6 +13,11 @@ public class DepartmentService {
 
     public DeptInfo getDepartment(String department){
         Connection conn = dbUtil.connection();
-        return deptRepo.getDeptId(conn, department);
+        return deptRepo.getDept(conn, department);
+    }
+
+    public List<DeptInfo> getDeptInfo(){
+        Connection conn = dbUtil.connection();
+        return deptRepo.getAllDepartInfo(conn);
     }
 }

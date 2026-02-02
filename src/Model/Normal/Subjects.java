@@ -1,4 +1,4 @@
-package Model;
+package Model.Normal;
 
 public class Subjects {
     String code;

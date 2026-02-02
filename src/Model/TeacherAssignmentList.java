@@ -1,5 +1,9 @@
 package Model;
 
+import Model.Normal.BatchInfo;
+import Model.Normal.Subjects;
+import Model.Normal.TeacherAssignment;
+
 import java.util.List;
 
 public class TeacherAssignmentList {

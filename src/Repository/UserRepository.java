@@ -1,7 +1,7 @@
 package Repository;
 
-import Model.User;
-import Model.UserView;
+import Model.Normal.User;
+import Model.Normal.UserView;
 import util.DBUtil;
 
 import java.sql.*;
@@ -35,8 +35,7 @@ public class UserRepository {
     public int regUser(Connection connection, String user_name, String password_hash, String role){
         String qry = "INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)";
         try {
-            Connection conn = connection;
-            PreparedStatement ps = conn.prepareStatement(qry, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(qry, Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1,user_name);
             ps.setString(2, password_hash);

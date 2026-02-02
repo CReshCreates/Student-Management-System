@@ -1,10 +1,9 @@
 package menu;
 
 import Controller.AuthController;
-import Model.LoginRequest;
-import Model.User;
-import service.AuthService;
-import session.Session;
+import Model.DataTransfer.LoginRequest;
+import Model.Normal.User;
+import Session.Session;
 
 import java.util.Scanner;
 
@@ -27,7 +26,7 @@ public class MainMenu {
             Session.login(user);
 
             switch(user.getRoles()){
-                case "ADMIN" -> new AdminMenu().show();
+                case "ADMIN" -> new AdminMenu().show(scanner);
                 case "STUDENT" -> new StudentMenu().show();
                 case "TEACHER" -> new TeacherMenu().show();
             }
