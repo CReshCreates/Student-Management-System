@@ -8,6 +8,7 @@ import Model.Normal.UserView;
 import service.*;
 import util.PasswordUtil;
 import util.PasswordValidator;
+import util.ReadInteger;
 
 import java.util.List;
 import java.util.Scanner;
@@ -23,6 +24,7 @@ public class AdminController {
     private final TeacherService teacherService = new TeacherService();
     private final SubjectService subjectService = new SubjectService();
     private final TeacherAssignmentService teacherAssignmentService = new TeacherAssignmentService();
+    private final ReadInteger readInteger = new ReadInteger();
 
 
     //Validations
@@ -46,7 +48,7 @@ public class AdminController {
     public int teacherValidation(Scanner scanner, int teacherId){
         while (!teacherService.isTeacherAvailable(teacherId)) {
             System.out.println("Teacher not found. Please try again.");
-            teacherId = readInt(scanner);
+            teacherId = readInteger.readInt(scanner);
         }
         return teacherId;
     }
@@ -74,7 +76,7 @@ public class AdminController {
         while(batchInfo == null){
             System.out.println("Either program or batch not found.");
             System.out.println("Enter a valid batch: ");
-            year = readInt(scanner);
+            year = readInteger.readInt(scanner);
 
             System.out.println("Enter a valid program for that batch: ");
             program = scanner.nextLine();
@@ -101,7 +103,7 @@ public class AdminController {
             System.out.println("Batch with this program already exists.");
 
             System.out.print("Enter new batch year: ");
-            year = readInt(scanner);
+            year = readInteger.readInt(scanner);
 
             System.out.print("Enter new program: ");
             program = scanner.nextLine();
@@ -181,15 +183,5 @@ public class AdminController {
 
     public String encryptPassword(String password){
         return passwordUtil.encryptPassword(password);
-    }
-
-    private int readInt(Scanner scanner) {
-        while (!scanner.hasNextInt()) {
-            System.out.println("Enter a valid number:");
-            scanner.nextLine();
-        }
-        int value = scanner.nextInt();
-        scanner.nextLine();
-        return value;
     }
 }

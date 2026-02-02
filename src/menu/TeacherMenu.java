@@ -1,16 +1,16 @@
 package menu;
 
-import Controller.PasswordController;
 import Controller.TeacherController;
-import session.Session;
+import Session.Session;
+import util.ReadInteger;
 
 import java.util.Scanner;
 
 public class TeacherMenu {
     private final TeacherController teacherController = new TeacherController();
+    private final ReadInteger readInteger = new ReadInteger();
 
-    public void show(){
-        Scanner scanner = new Scanner(System.in);
+    public void show(Scanner scanner){
         System.out.println("--------Welcome to Teacher Menu--------");
         System.out.println("1. View course assignment.");
         System.out.println("2. Take student's attendance.");
@@ -24,7 +24,7 @@ public class TeacherMenu {
         System.out.println("10. Logout.");
         System.out.println("Enter your choice:");
 
-        int choice = scanner.nextInt();
+        int choice = readInteger.readInt(scanner);
 
         switch(choice){
             case 1 -> teacherController.getCourseAssignment();

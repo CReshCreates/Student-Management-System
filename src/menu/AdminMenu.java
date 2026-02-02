@@ -7,12 +7,14 @@ import Model.DataTransfer.UserRegInfo;
 import Model.Normal.Teacher;
 import Model.Normal.UserView;
 import Session.Session;
+import util.ReadInteger;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class AdminMenu {
     private final AdminController controller = new AdminController();
+    private final ReadInteger readInteger = new ReadInteger();
 
     public void show(Scanner scanner){
         while(true){
@@ -84,7 +86,7 @@ public class AdminMenu {
                 String address = scanner.nextLine();
 
                 System.out.println("Batch/Year");
-                int year = readInt(scanner);
+                int year = readInteger.readInt(scanner);
 
                 System.out.println("Program:");
                 String program = scanner.nextLine();
@@ -162,7 +164,7 @@ public class AdminMenu {
 
     public void batchCreationMenu(Scanner scanner){
         System.out.println("Enter a new batch: ");
-        int newBatch = readInt(scanner);
+        int newBatch = readInteger.readInt(scanner);
         System.out.println("Enter a program: ");
         String newProgram = scanner.nextLine();
 
@@ -174,12 +176,12 @@ public class AdminMenu {
         deptInfo.forEach(System.out::println);
         System.out.println("Enter the department id: ");
 
-        int deptId = readInt(scanner);
+        int deptId = readInteger.readInt(scanner);
         List<Teacher> teacherInfo = controller.showTeachersRelativeToDept(deptId);
         teacherInfo.forEach(System.out::println);
 
         System.out.println("Enter teacher id to assign subject: ");
-        int teacherId = readInt(scanner);
+        int teacherId = readInteger.readInt(scanner);
 
         teacherId = controller.teacherValidation(scanner, teacherId);
 
@@ -189,7 +191,7 @@ public class AdminMenu {
         int subId = controller.subjectValidation(scanner, subjectCode);
 
         System.out.println("Enter batch: ");
-        int batch = readInt(scanner);
+        int batch = readInteger.readInt(scanner);
 
         System.out.println("Enter the program: ");
         String program = scanner.nextLine();
@@ -197,7 +199,7 @@ public class AdminMenu {
         BatchInfo batchInfo = controller.validateBatchAndProgram(scanner, batch, program);
 
         System.out.println("Enter the number of sections to be assigned: ");
-        int numberOfSection = readInt(scanner);
+        int numberOfSection = readInteger.readInt(scanner);
         String[] section;
 
         if(numberOfSection == 3){
@@ -213,15 +215,5 @@ public class AdminMenu {
 
         controller.assignSubjectToTeacher(teacherId, subId, batchInfo.getBatchId(), section, numberOfSection);
 
-    }
-
-    private int readInt(Scanner scanner) {
-        while (!scanner.hasNextInt()) {
-            System.out.println("Enter a valid number:");
-            scanner.nextLine();
-        }
-        int value = scanner.nextInt();
-        scanner.nextLine();
-        return value;
     }
 }

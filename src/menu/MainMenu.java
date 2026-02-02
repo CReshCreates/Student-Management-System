@@ -28,7 +28,7 @@ public class MainMenu {
             switch(user.getRoles()){
                 case "ADMIN" -> new AdminMenu().show(scanner);
                 case "STUDENT" -> new StudentMenu().show();
-                case "TEACHER" -> new TeacherMenu().show();
+                case "TEACHER" -> new TeacherMenu().show(scanner);
             }
         }
     }
