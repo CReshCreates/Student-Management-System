@@ -9,6 +9,14 @@ public class Teacher {
         this.fullName = fullName;
     }
 
+    public String getName(){
+        return fullName;
+    }
+
+    public int getTeacherId(){
+        return teacherId;
+    }
+
     public String toString(){
         return " Teacher ID: " + teacherId + ", Teacher Name: " + fullName;
     }

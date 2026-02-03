@@ -76,4 +76,26 @@ public class TeacherRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public Teacher getTeacherInfo(Connection conn, int userId){
+        String qry = "SELECT t_id, full_name FROM teachers WHERE u_id = ?";
+
+        int teacherId = 0;
+        String fullName = null;
+
+        try{
+            PreparedStatement preparedStatement = conn.prepareStatement(qry);
+            preparedStatement.setInt(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                teacherId = resultSet.getInt(1);
+                fullName = resultSet.getString(2);
+            }
+            return new Teacher(teacherId, fullName);
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
 }

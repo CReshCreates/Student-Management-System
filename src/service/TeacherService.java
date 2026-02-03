@@ -19,8 +19,8 @@ public class TeacherService {
         return teacherRepo.isAvailable(dbUtil.connection(), teacherId);
     }
 
-    public void viewCourseAssignment(){
-
+    public Teacher getTeacherInfoByUserId(int userId){
+        return teacherRepo.getTeacherInfo(dbUtil.connection(), userId);
     }
 
     public void studentAttendance(){

@@ -11,7 +11,7 @@ import java.util.List;
 public class UserRepository {
     private final DBUtil dbUtil = new DBUtil();
     public User findUserByName(String username) throws SQLException {
-        String qry = "SELECT username, password_hash, role FROM users WHERE username = ?";
+        String qry = "SELECT username, password_hash, role, u_id FROM users WHERE username = ?";
 
         Connection conn = dbUtil.connection();
         PreparedStatement preparedStatement = conn.prepareStatement(qry);
@@ -23,9 +23,10 @@ public class UserRepository {
             String UserName = rs.getString("username");
             String Password = rs.getString("password_hash");
             String Roles = rs.getString("role");
+            int userId = rs.getInt("u_id");
 
             if(UserName.equals(username)){
-                return new User(UserName, Password, Roles);
+                return new User(UserName, Password, Roles, userId);
             }
         }
 

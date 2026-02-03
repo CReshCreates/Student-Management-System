@@ -1,8 +1,7 @@
 package menu;
 
-import Controller.PasswordController;
 import Controller.StudentController;
-import session.Session;
+import Session.Session;
 
 import java.util.Scanner;
 
